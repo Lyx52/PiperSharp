@@ -77,7 +77,7 @@ public static class PiperDownloader
         return _voiceModels;
     }
 
-    public static async Task<string> DownloadModel(this VoiceModel model, string extractTo = "./")
+    public static async Task<VoiceModel> DownloadModel(this VoiceModel model, string extractTo = "./")
     {
         var path = Path.Join(extractTo, model.Key);
         if (!Directory.Exists(path))
@@ -95,7 +95,15 @@ public static class PiperDownloader
             fs.Close();
             downloadStream.Close();
         }
+        
+        model.ModelLocation = path;
+        await using var modelInfoFile = File.OpenWrite(Path.Join(path, "model.json"));
+        await JsonSerializer.SerializeAsync<VoiceModel>(modelInfoFile, model, new JsonSerializerOptions()
+        {
+            WriteIndented = true
+        });
+        modelInfoFile.Close();
 
-        return path;
+        return model;
     }
 }
