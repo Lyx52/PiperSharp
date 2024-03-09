@@ -55,7 +55,9 @@ public static class PiperDownloader
         }
         else
         {
-            using var archive = TarArchive.CreateInputTarArchive(downloadStream, Encoding.UTF8);
+            using var gzipStream = new GZipInputStream(downloadStream);
+            gzipStream.Flush();
+            using var archive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.UTF8);
             archive.ExtractContents(extractTo);
         }
         return extractTo;

@@ -7,7 +7,7 @@ public class SimpleProgram
     public static async Task Main()
              {
                  var cwd = Directory.GetCurrentDirectory();
-                 var piperPath = Path.Join(cwd, "piper", "piper.exe");
+                 var piperPath = Path.Join(cwd, "piper", Environment.OSVersion.Platform == PlatformID.Win32NT ? "piper.exe" : "piper");
                  if (!File.Exists(piperPath))
                  {
                      await PiperDownloader.DownloadPiper().ExtractPiper(cwd);    
