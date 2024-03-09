@@ -59,7 +59,7 @@ public static class PiperDownloader
             using var gzipStream = new GZipInputStream(downloadStream);
             gzipStream.Flush();
             using var archive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.UTF8);
-            archive.ExtractContents(extractTo);
+            archive.ExtractContents(extractTo, true);
         }
         return extractTo;
     }

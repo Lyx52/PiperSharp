@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using PiperSharp.Models;
 using NUnit.Framework;
@@ -15,6 +16,16 @@ public class PiperSharpTests
         if (Directory.Exists(piperPath)) Directory.Delete(piperPath, true);
         await PiperDownloader.DownloadPiper().ExtractPiper(cwd);
         Assert.That(Directory.Exists(piperPath), "Piper doesn't exist");
+        if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+        {
+            var process = Process.Start(new ProcessStartInfo()
+            {
+                FileName = "/bin/chmod",
+                Arguments = $"+x {Path.Join(piperPath, "piper")}",
+                UseShellExecute = false
+            });
+            await process!.WaitForExitAsync();
+        }
     }
     
     [Test]
