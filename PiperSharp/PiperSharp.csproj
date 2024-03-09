@@ -1,16 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <PackageId>PiperSharp</PackageId>
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIconUrl />
+        <Version>1.0.0</Version>
+        <RepositoryUrl>https://github.com/Lyx52/PiperSharp</RepositoryUrl>
+        <Description>Piper TTS Integration using C#</Description>
+        <Authors>Ikars Melnalksnis</Authors>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="NAudio" Version="2.2.1" />
       <PackageReference Include="NAudio.Core" Version="2.2.1" />
       <PackageReference Include="SharpZipLib" Version="1.4.2" />
+      <None Include="../README.md" Pack="true" PackagePath="./" />
+        <None Include="../LICENSE" Pack="true" PackagePath="./" />
     </ItemGroup>
 
 </Project>
