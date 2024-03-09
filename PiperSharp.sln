@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp", "PiperSharp\PiperSharp.csproj", "{1347374E-23B1-421B-A6E8-F1AC8043D241}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp.Tests", "PiperSharp.Tests\PiperSharp.Tests.csproj", "{A3746A96-0BE9-497D-AA7D-AE642E705550}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp.Examples", "PiperSharp.Examples\PiperSharp.Examples.csproj", "{BD600C3A-10AF-4954-BF58-7B5AF2147662}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{1347374E-23B1-421B-A6E8-F1AC8043D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1347374E-23B1-421B-A6E8-F1AC8043D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1347374E-23B1-421B-A6E8-F1AC8043D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3746A96-0BE9-497D-AA7D-AE642E705550}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3746A96-0BE9-497D-AA7D-AE642E705550}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3746A96-0BE9-497D-AA7D-AE642E705550}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3746A96-0BE9-497D-AA7D-AE642E705550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
