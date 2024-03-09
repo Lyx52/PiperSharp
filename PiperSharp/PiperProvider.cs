@@ -66,6 +66,7 @@ public class PiperProvider
                 var waveStream = new WaveFileWriter(output, stream.WaveFormat);
                 await stream.CopyToAsync(waveStream, token);
                 await stream.FlushAsync(token);
+                await waveStream.FlushAsync(token);
             } break;
         }
         await output.FlushAsync(token);
