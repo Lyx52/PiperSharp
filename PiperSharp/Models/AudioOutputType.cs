@@ -3,5 +3,6 @@
 public enum AudioOutputType
 {
     Raw,
-    Wav
+    Wav,
+    Mp3
 }

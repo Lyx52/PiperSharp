@@ -13,9 +13,6 @@ public class VoiceModel
     [JsonPropertyName("name")]
     public string Name { get; set; }
     
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public VoiceQuality Quality { get; set; }
-    
     [JsonPropertyName("num_speakers")]
     public int NumSpeakers { get; set; }
     
@@ -25,15 +22,15 @@ public class VoiceModel
     [JsonPropertyName("files")]
     public Dictionary<string, dynamic> Files { get; set; }
     
-    [JsonPropertyName("aliases")]
-    public string[] Aliases { get; set; }
-    
     [JsonPropertyName("language")]
     public VoiceLanguage Language { get; set; }
     
+    [JsonPropertyName("audio")]  
+    public VoiceAudio? Audio { get; set; }
+    
     [JsonIgnore]
     public string? ModelLocation { get; set; }
-
+    
     public string GetModelLocation()
     {
         if (ModelLocation is null) throw new FileNotFoundException("Model not downloaded!");

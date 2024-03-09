@@ -6,26 +6,18 @@ public class PiperConfiguration
 {
     public string Location { get; set; }
     public VoiceModel Model { get; set; }
-    public AudioOutputType OutputType { get; set; }
     public bool UseCuda { get; set; }
     public uint SpeakerId { get; set; }
     public string BuildArguments()
     {
-        var sb = new StringBuilder();
-        sb.Append($"--model {Model.GetModelLocation()} ");
-        switch (OutputType)
+        var args = new List<string>()
         {
-            case AudioOutputType.Raw: 
-                sb.Append("--output-raw "); 
-            break;
-            case AudioOutputType.Wav: 
-            default:
-                sb.Append("--output_file - ");
-            break;
-        }
-        if (SpeakerId > 0) sb.Append($"--speaker {SpeakerId}");
-        if (UseCuda) sb.Append("--use-cuda ");
-        sb.Append("--quiet ");
-        return sb.ToString();
+            "--quiet",
+            "--output-raw",
+            $"--model {Model.GetModelLocation()}"
+        };
+        if (SpeakerId > 0) args.Add($"--speaker {SpeakerId}");
+        if (UseCuda) args.Add("--use-cuda");
+        return string.Join(' ', args);
     }
 }

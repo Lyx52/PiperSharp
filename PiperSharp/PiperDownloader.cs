@@ -1,12 +1,8 @@
 ﻿using System.IO.Compression;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Formats;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
 using PiperSharp.Models;
 
@@ -77,9 +73,9 @@ public static class PiperDownloader
         return _voiceModels;
     }
 
-    public static async Task<VoiceModel> DownloadModel(this VoiceModel model, string extractTo = "./")
+    public static async Task<VoiceModel> DownloadModel(this VoiceModel model, string saveModelTo = "./")
     {
-        var path = Path.Join(extractTo, model.Key);
+        var path = Path.Join(saveModelTo, model.Key);
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -88,11 +84,28 @@ public static class PiperDownloader
         var client = new HttpClient();
         foreach (var file in model.Files.Keys)
         {
-            var filePath = Path.Join(path, Path.GetFileName(file));
+            var fileName = Path.GetFileName(file);
+            var filePath = Path.Join(path, fileName);
             var downloadStream = await client.GetStreamAsync(MODEL_DOWNLOAD_URL.Replace("MODEL_FILE_URL", file));
-            await using var fs = File.OpenWrite(filePath);
-            await downloadStream.CopyToAsync(fs);
-            fs.Close();
+            // Load Audio configuration from .onnx.json file
+            if (fileName.EndsWith(".onnx.json"))
+            {
+                var ms = new MemoryStream();
+                await downloadStream.CopyToAsync(ms);
+                ms.Seek(0, SeekOrigin.Begin);
+                var modelJson = await JsonSerializer.DeserializeAsync<VoiceModel>(ms);
+                model.Audio = modelJson!.Audio;
+                ms.Seek(0, SeekOrigin.Begin);
+                await using var fs = File.OpenWrite(filePath);
+                await ms.CopyToAsync(fs);
+                fs.Close();
+            }
+            else
+            {
+                await using var fs = File.OpenWrite(filePath);
+                await downloadStream.CopyToAsync(fs);    
+                fs.Close();
+            }
             downloadStream.Close();
         }
         
