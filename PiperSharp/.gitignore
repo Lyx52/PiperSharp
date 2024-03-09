@@ -4,6 +4,12 @@
 ## Get latest from `dotnet new gitignore`
 .idea
 .idea/
+
+bin
+bin/
+
+obj
+obj/
 # dotenv files
 .env
 
