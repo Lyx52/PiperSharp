@@ -33,9 +33,9 @@ jobs:
         run: dotnet build --configuration Release /p:Version=${{ steps.set_version.outputs.no-v }} 
 
       - name: Pack
-        run: dotnet pack --configuration Release --no-build --output nupkgs PiperSharp/PiperSharp.csproj
+        run: dotnet pack --configuration Release --no-build --output /home/runner/work/PiperSharp/PiperSharp/nupkgs PiperSharp/PiperSharp.csproj
 
       - name: Publish to NuGet.org
-        run: dotnet nuget push nupkgs/PiperSharp.${{ steps.set_version.outputs.no-v }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push /home/runner/work/PiperSharp/PiperSharp/nupkgs/PiperSharp.${{ steps.set_version.outputs.no-v }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }} 
