@@ -19,8 +19,18 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Set Versions
+        uses: actions/github-script@v4
+        id: set_version
+        with:
+          script: |
+            const tag = context.ref.substring(10)
+            const no_v = tag.replace('v', '')
+            core.setOutput('tag', tag)
+            core.setOutput('no-v', no_v)
+
       - name: Build
-        run: dotnet build --configuration Release /p:Version=${{ github.ref_name[1:] }} 
+        run: dotnet build --configuration Release /p:Version=${{ steps.set_version.outputs.no-v }} 
 
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output nupkgs
