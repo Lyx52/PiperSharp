@@ -1,11 +1,10 @@
 ﻿using System.IO.Compression;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Text;
 using System.Text.Json;
-using ICSharpCode.SharpZipLib.Tar;
-using ICSharpCode.SharpZipLib.GZip;
 using PiperSharp.Models;
+using SharpCompress.Common;
+using SharpCompress.Readers;
 
 namespace PiperSharp;
 
@@ -56,10 +55,28 @@ public static class PiperDownloader
         }
         else
         {
-            using var gzipStream = new GZipInputStream(downloadStream);
-            gzipStream.Flush();
-            using var archive = TarArchive.CreateInputTarArchive(gzipStream, Encoding.UTF8);
-            archive.ExtractContents(extractTo, true);
+            using (var reader = ReaderFactory.Open(downloadStream))
+            {
+                while (reader.MoveToNextEntry())
+                {
+                    if (!reader.Entry.IsDirectory)
+                    {
+                        Console.WriteLine(reader.Entry.Key);
+                        reader.WriteEntryToDirectory(extractTo, new ExtractionOptions()
+                        {
+                            ExtractFullPath = true,
+                            Overwrite = true,
+                            WriteSymbolicLink = (path, targetPath) =>
+                            {
+                                if (Environment.OSVersion.Platform is PlatformID.Unix or PlatformID.MacOSX)
+                                {
+                                    File.CreateSymbolicLink(path, targetPath);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
         }
         return extractTo;
     }
