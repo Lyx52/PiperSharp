@@ -1,6 +1,6 @@
 # PiperSharp TTS
 
-[![Nuget package](https://img.shields.io/nuget/vpre/SharpPiper)](https://www.nuget.org/packages/PiperSharp/)
+[![NuGet Version](https://img.shields.io/nuget/v/PiperSharp)](https://www.nuget.org/packages/PiperSharp)
 [![dotnet](https://github.com/Lyx52/PiperSharp/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/Lyx52/PiperSharp/actions/workflows/dotnet.yml)
 [![License: MIT](https://img.shields.io/github/license/Lyx52/PiperSharp)](https://github.com/Lyx52/PiperSharp/blob/master/LICENSE)
 
