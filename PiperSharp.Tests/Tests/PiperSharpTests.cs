@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
+using NAudio.Wave;
 using NUnit.Framework;
 using PiperSharp.Models;
-using NUnit.Framework;
 namespace PiperSharp.Tests.Tests;
 
 [TestFixture]
@@ -67,5 +66,35 @@ public class PiperSharpTests
             "Expected WAV MAGIC number"
         );
         Assert.That(result.Length > 20_000, "Expected larger filesize!");
+    }
+    [Test]
+    public async Task TestTTSInferenceWaveProvider()
+    {
+        var cwd = Directory.GetCurrentDirectory();
+        const string modelName = "ar_JO-kareem-low";
+        var modelPath = Path.Join(cwd, modelName);
+        var piperPath = Path.Join(cwd, "piper", Environment.OSVersion.Platform == PlatformID.Win32NT ? "piper.exe" : "piper");
+        var model = await VoiceModel.LoadModel(modelPath);
+        var piperModel = new PiperWaveProvider(new PiperConfiguration()
+        {
+            Location = piperPath,
+            Model = model,
+        });
+        piperModel.Start();
+        await piperModel.InferPlayback("Hello there!");
+        var result = new byte[19200];
+        piperModel.Read(result, 0, result.Length);
+        var rs = new RawSourceWaveStream(result, 0, result.Length, piperModel.WaveFormat);
+        var stream = WaveFormatConversionStream.CreatePcmStream(rs);
+        var testStream = new MemoryStream();
+        WaveFileWriter.WriteWavFileToStream(testStream, stream);
+        testStream.Seek(0, SeekOrigin.Begin);
+        Assert.That(
+            testStream.ReadByte() == 82 &&
+            testStream.ReadByte() == 73 &&
+            testStream.ReadByte() == 70 &&
+            testStream.ReadByte() == 70,
+            "Expected WAV MAGIC number"
+        );
     }
 }
