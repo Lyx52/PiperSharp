@@ -30,13 +30,14 @@ public class PiperWaveProvider : IWaveProvider
         WaveFormat = new WaveFormat((int)(configuration.Model.Audio?.SampleRate ?? 16000), 1);
     }
 
-    public Task StartAndWaitForExitAsync(CancellationToken token = default(CancellationToken))
+    public void Start()
     {
         _process.Start();
         _internalAudioStream = new RawSourceWaveStream(_process.StandardOutput.BaseStream, WaveFormat);
         Started = true;
-        return _process.WaitForExitAsync(token);
     }
+    
+    public Task WaitForExit(CancellationToken token = default(CancellationToken)) => _process.WaitForExitAsync(token);
     
     public int Read(byte[] buffer, int offset, int count)
     {

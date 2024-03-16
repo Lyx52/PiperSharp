@@ -33,10 +33,12 @@ public class SimplePlaybackProgram
             Model = model,
             UseCuda = false
         });
+        provider.Start();
         consoleThread.Start(provider);
         playbackThread.Start(provider);
-        await provider.StartAndWaitForExitAsync();
+        
         consoleThread.Join();
+        await provider.WaitForExit();
     }
 
     public static void PlaybackThread(object? obj)
