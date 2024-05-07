@@ -4,7 +4,8 @@ namespace PiperSharp.Models;
 
 public class PiperConfiguration
 {
-    public string Location { get; set; }
+    public string ExecutableLocation { get; set; } = PiperDownloader.DefaultPiperExecutableLocation;
+    public string WorkingDirectory { get; set; } = PiperDownloader.DefaultPiperLocation;
     public VoiceModel Model { get; set; }
     public bool UseCuda { get; set; }
     public uint SpeakerId { get; set; }

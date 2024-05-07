@@ -37,7 +37,10 @@ public class VoiceModel
         var modelFileName = Path.GetFileName(Files.Keys.FirstOrDefault(f => f.EndsWith(".onnx")));
         return Path.Join(ModelLocation, modelFileName);
     }
-    
+
+
+    public static Task<VoiceModel> LoadModelByKey(string modelKey) 
+        => LoadModel(Path.Join(PiperDownloader.DefaultModelLocation, modelKey));
     public static async Task<VoiceModel> LoadModel(string directory)
     {
         if (!Directory.Exists(directory)) throw new DirectoryNotFoundException("Model directory not found!");

@@ -15,6 +15,8 @@ public class PiperSharpTests
         if (Directory.Exists(piperPath)) Directory.Delete(piperPath, true);
         await PiperDownloader.DownloadPiper().ExtractPiper(cwd);
         Assert.That(Directory.Exists(piperPath), "Piper doesn't exist");
+        
+        // For linux we need to mark it as executable
         if (Environment.OSVersion.Platform != PlatformID.Win32NT)
         {
             var process = Process.Start(new ProcessStartInfo()
@@ -54,7 +56,7 @@ public class PiperSharpTests
         var model = await VoiceModel.LoadModel(modelPath);
         var piperModel = new PiperProvider(new PiperConfiguration()
         {
-            Location = piperPath,
+            ExecutableLocation = piperPath,
             Model = model,
         });
         var result = await piperModel.InferAsync("Hello there!", AudioOutputType.Wav);
@@ -77,7 +79,7 @@ public class PiperSharpTests
         var model = await VoiceModel.LoadModel(modelPath);
         var piperModel = new PiperWaveProvider(new PiperConfiguration()
         {
-            Location = piperPath,
+            ExecutableLocation = piperPath,
             Model = model,
         });
         piperModel.Start();

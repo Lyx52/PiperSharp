@@ -15,6 +15,13 @@ public static class PiperDownloader
     private const string MODEL_LIST_URL = "https://huggingface.co/rhasspy/piper-voices/raw/main/voices.json";
     private const string MODEL_DOWNLOAD_URL =
         "https://huggingface.co/rhasspy/piper-voices/resolve/main/MODEL_FILE_URL?download=true";
+
+    public static string DefaultLocation => Directory.GetCurrentDirectory();
+    public static string DefaultModelLocation => Path.Join(DefaultLocation, "models");
+    public static string DefaultPiperLocation => Path.Join(DefaultLocation, "piper");
+    public static string DefaultPiperExecutableLocation => Path.Join(DefaultPiperLocation, PiperExecutable);
+    public static string PiperExecutable => Environment.OSVersion.Platform == PlatformID.Win32NT ? "piper.exe" : "piper";
+    
     
     private static Dictionary<string, VoiceModel>? _voiceModels;
     private static Regex RemoveLastSlash = new Regex(@"\/$", RegexOptions.Compiled);
@@ -43,9 +50,11 @@ public static class PiperDownloader
         return downloadStream;
     }
 
-    public static async Task<string> ExtractPiper(this Task<Stream> downloadStream, string extractTo = "./")
+    public static Task<string> ExtractPiper(this Task<Stream> downloadStream)
+        => ExtractPiper(downloadStream, DefaultLocation);
+    public static async Task<string> ExtractPiper(this Task<Stream> downloadStream, string extractTo)
         => ExtractPiper(await downloadStream, extractTo);
-    public static string ExtractPiper(this Stream downloadStream, string extractTo="./")
+    public static string ExtractPiper(this Stream downloadStream, string extractTo)
     {
         bool isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
         if (isWindows)
@@ -61,7 +70,6 @@ public static class PiperDownloader
                 {
                     if (!reader.Entry.IsDirectory)
                     {
-                        Console.WriteLine(reader.Entry.Key);
                         reader.WriteEntryToDirectory(extractTo, new ExtractionOptions()
                         {
                             ExtractFullPath = true,
@@ -81,6 +89,18 @@ public static class PiperDownloader
         return extractTo;
     }
 
+    public static async Task<VoiceModel?> GetModelByKey(string modelName)
+    {
+        await GetHuggingFaceModelList();
+        return _voiceModels?.GetValueOrDefault(modelName);
+    }
+    
+    public static async Task<VoiceModel?> TryGetModelByKey(string modelKey)
+    {
+        await GetHuggingFaceModelList();
+        return _voiceModels?.GetValueOrDefault(modelKey);
+    }
+    
     public static async Task<Dictionary<string, VoiceModel>?> GetHuggingFaceModelList()
     {
         if (_voiceModels is not null) return _voiceModels;
@@ -93,7 +113,19 @@ public static class PiperDownloader
         return _voiceModels;
     }
 
-    public static async Task<VoiceModel> DownloadModel(this VoiceModel model, string saveModelTo = "./")
+    public static async Task<VoiceModel> DownloadModelByKey(string modelKey)
+    {
+        var model = await GetModelByKey(modelKey);
+        if (model is null)
+        {
+            throw new ArgumentException($"Model {modelKey} does not exist!", nameof(modelKey));
+        }
+
+        return await model.DownloadModel();
+    }
+    public static Task<VoiceModel> DownloadModel(this VoiceModel model)
+        => model.DownloadModel(DefaultModelLocation);
+    public static async Task<VoiceModel> DownloadModel(this VoiceModel model, string saveModelTo)
     {
         var path = Path.Join(saveModelTo, model.Key);
         if (!Directory.Exists(path))

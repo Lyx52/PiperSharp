@@ -18,13 +18,13 @@ public class PiperProvider
         {
             StartInfo = new ProcessStartInfo()
             {
-                FileName = configuration.Location,
+                FileName = configuration.ExecutableLocation,
                 Arguments = configuration.BuildArguments(),
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.GetDirectoryName(configuration.Location)
+                WorkingDirectory = configuration.WorkingDirectory
             },
         };
     }

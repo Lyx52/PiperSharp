@@ -1,4 +1,4 @@
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using PiperSharp.Models;
 
 namespace PiperSharp.Examples;
@@ -7,29 +7,26 @@ public class SimplePlaybackProgram
 {
     public async Task Run()
     {
-        var cwd = Directory.GetCurrentDirectory();
-        var piperPath = Path.Join(cwd, "piper", Environment.OSVersion.Platform == PlatformID.Win32NT ? "piper.exe" : "piper");
-        if (!File.Exists(piperPath))
+        const string ModelKey = "ar_JO-kareem-low";
+        if (!File.Exists(PiperDownloader.DefaultPiperExecutableLocation))
         {
-            await PiperDownloader.DownloadPiper().ExtractPiper(cwd);    
+            await PiperDownloader.DownloadPiper().ExtractPiper(PiperDownloader.DefaultLocation);    
         }
-        var modelPath = Path.Join(cwd, "ar_JO-kareem-low");
+        var modelPath = Path.Join(PiperDownloader.DefaultModelLocation, ModelKey);
         VoiceModel? model = null;
-        if (!Directory.Exists(modelPath))
+        if (Directory.Exists(modelPath))
         {
-            var models = await PiperDownloader.GetHuggingFaceModelList();
-            model = await models!["ar_JO-kareem-low"].DownloadModel();
+            model = await VoiceModel.LoadModelByKey(ModelKey);
         }
         else
         {
-            model = await VoiceModel.LoadModel(modelPath);
+            model = await PiperDownloader.DownloadModelByKey(ModelKey);
         }
         
         var consoleThread = new Thread(ConsoleThread);
         var playbackThread = new Thread(PlaybackThread);
         var provider = new PiperWaveProvider(new PiperConfiguration()
         {
-            Location = piperPath,
             Model = model,
             UseCuda = false
         });
@@ -40,7 +37,7 @@ public class SimplePlaybackProgram
         consoleThread.Join();
         await provider.WaitForExit();
     }
-
+    
     public static void PlaybackThread(object? obj)
     {
         var provider = (PiperWaveProvider)obj!;
@@ -54,6 +51,7 @@ public class SimplePlaybackProgram
             }
         }
     }
+    
     public static void ConsoleThread(object? obj)
     {
         var provider = (PiperWaveProvider)obj!;
