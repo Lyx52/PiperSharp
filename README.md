@@ -18,16 +18,25 @@ await PiperDownloader.DownloadPiper().ExtractPiper(cwd); // Downloads and extrac
 // You can get list of models from hugging face using
 var models = await PiperDownloader.GetHuggingFaceModelList(); // Returns a dictionary with model key as key
 var model = models["ar_JO-kareem-low"];
+
+// or you can do
+var model = await PiperDownloader.GetModelByKey("ar_JO-kareem-low");
 ...
 // Before you can use the model you need to download it using
 model = await model.DownloadModel(cwd);
 // Or if its downloaded you can load it from directory
 model = await VoiceModel.LoadModel(modelPath);
+
+// Now you can also do
+model = await PiperDownloader.DownloadModelByKey("ar_JO-kareem-low");
+// Or if its downloaded you can load it by key aswell
+model = await VoiceModel.LoadModelByKey("ar_JO-kareem-low");
 ...
 // To start generating audio use PiperProvider
 var piperModel = new PiperProvider(new PiperConfiguration()
 {
-    Location = piperPath, // Path to piper directory (in this case cwd/piper)
+    ExecutableLocation = Path.Join(cwd, "piper", "piper.exe"), // Path to piper executable
+    WorkingDirectory = Path.Join(cwd, "piper"), // Path to piper working directory
     Model = model, // Loaded/downloaded VoiceModel
 });
 
