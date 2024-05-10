@@ -24,7 +24,7 @@ public class PiperConfiguration
         };
         if (SpeakerId > 0) args.Add($"--speaker {SpeakerId}");
         if (SpeakingRate != 1f) {
-            var lengthScaleStr = SpeakingRate.ToString("0.0").Replace(',', '.');
+            var lengthScaleStr = SpeakingRate.ToString("0.00").Replace(',', '.');
             args.Add($"--length_scale {lengthScaleStr}");
         }
         if (UseCuda) args.Add("--use-cuda");
