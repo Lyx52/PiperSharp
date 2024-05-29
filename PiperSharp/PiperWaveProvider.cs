@@ -4,40 +4,27 @@ using PiperSharp.Models;
 
 namespace PiperSharp;
 
-public class PiperWaveProvider : IWaveProvider
+public class PiperWaveProvider : PiperStreamProvider, IWaveProvider
 {
     public PiperConfiguration Configuration { get; set; }
-    public bool Started { get; private set; } = false;
-    private Process _process;
+    public bool Started => _piperStreamProvider.Started;
+    private PiperStreamProvider _piperStreamProvider;
     private RawSourceWaveStream? _internalAudioStream;
 
-    public PiperWaveProvider(PiperConfiguration configuration)
+    public PiperWaveProvider(PiperConfiguration configuration) : base(configuration)
     {
+        _piperStreamProvider = new PiperStreamProvider(configuration);
         Configuration = configuration;
-        _process = new Process()
-        {
-            StartInfo = new ProcessStartInfo()
-            {
-                FileName = configuration.ExecutableLocation,
-                Arguments = configuration.BuildArguments(),
-                RedirectStandardInput = true,
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                WorkingDirectory = configuration.WorkingDirectory
-            },
-        };
         WaveFormat = new WaveFormat((int)(configuration.Model.Audio?.SampleRate ?? 16000), 1);
     }
 
     public void Start()
     {
-        _process.Start();
-        _internalAudioStream = new RawSourceWaveStream(_process.StandardOutput.BaseStream, WaveFormat);
-        Started = true;
+        _piperStreamProvider.Start();
+        _internalAudioStream = new RawSourceWaveStream(_piperStreamProvider, WaveFormat);
     }
     
-    public Task WaitForExit(CancellationToken token = default(CancellationToken)) => _process.WaitForExitAsync(token);
+    public Task WaitForExit(CancellationToken token = default(CancellationToken)) => _piperStreamProvider.WaitForExit(token);
     
     public int Read(byte[] buffer, int offset, int count)
     {
@@ -46,9 +33,6 @@ public class PiperWaveProvider : IWaveProvider
     }
 
     public Task InferPlayback(string text, CancellationToken token = default(CancellationToken))
-    {
-        if (!Started) throw new ApplicationException("Piper process not initialized!");
-        return _process.StandardInput.WriteLineAsync(text.AsMemory(), token);
-    }
+        => _piperStreamProvider.InferPlayback(text, token);
     public WaveFormat WaveFormat { get; }
 }
