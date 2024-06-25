@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using NAudio.Wave;
 using PiperSharp.Models;
 
@@ -14,6 +15,9 @@ public class PiperProvider
 
     public static Process ConfigureProcess(PiperConfiguration configuration)
     {
+        if (configuration.Model is null)
+            throw new ArgumentNullException(nameof(PiperConfiguration.Model), "VoiceModel not configured!");
+        
         return new Process()
         {
             StartInfo = new ProcessStartInfo()
@@ -24,7 +28,9 @@ public class PiperProvider
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = configuration.WorkingDirectory
+                WorkingDirectory = configuration.WorkingDirectory,
+                StandardInputEncoding = Encoding.UTF8,
+                StandardOutputEncoding = Encoding.UTF8,
             },
         };
     }
@@ -33,7 +39,7 @@ public class PiperProvider
     {
         var process = ConfigureProcess(Configuration);
         process.Start();
-        await process.StandardInput.WriteLineAsync(text);
+        await process.StandardInput.WriteLineAsync(text.ToUtf8());
         await process.StandardInput.FlushAsync();
         process.StandardInput.Close();
         using var ms = new MemoryStream();

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using NAudio.Wave;
 using PiperSharp.Models;
 
@@ -24,7 +25,9 @@ public class PiperWaveProvider : IWaveProvider
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                WorkingDirectory = configuration.WorkingDirectory
+                WorkingDirectory = configuration.WorkingDirectory,
+                StandardInputEncoding = Encoding.UTF8,
+                StandardOutputEncoding = Encoding.UTF8,
             },
         };
         WaveFormat = new WaveFormat((int)(configuration.Model.Audio?.SampleRate ?? 16000), 1);
@@ -48,7 +51,7 @@ public class PiperWaveProvider : IWaveProvider
     public Task InferPlayback(string text, CancellationToken token = default(CancellationToken))
     {
         if (!Started) throw new ApplicationException("Piper process not initialized!");
-        return _process.StandardInput.WriteLineAsync(text.AsMemory(), token);
+        return _process.StandardInput.WriteLineAsync(text.ToUtf8().AsMemory(), token);
     }
     public WaveFormat WaveFormat { get; }
 }
