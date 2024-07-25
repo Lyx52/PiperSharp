@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using System.Diagnostics;
+using NAudio.Wave;
 using PiperSharp;
 using PiperSharp.Models;
 
@@ -20,10 +21,11 @@ public class Program
         {
             model = await PiperDownloader.DownloadModelByKey("ru_RU-dmitri-medium");
         }
-            
+        
+        
         var piperModel = new PiperProvider(new PiperConfiguration()
         {
-            Model = model
+            Model = model,
         });
         var result = await piperModel.InferAsync(text, AudioOutputType.Wav); // Returns byte[]
         var fs = File.OpenWrite("audiofile.wav");

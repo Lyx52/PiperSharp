@@ -2,7 +2,6 @@
 using System.Text;
 using NAudio.Wave;
 using PiperSharp.Models;
-
 namespace PiperSharp;
 
 public class PiperProvider
@@ -22,7 +21,7 @@ public class PiperProvider
         {
             StartInfo = new ProcessStartInfo()
             {
-                FileName = configuration.ExecutableLocation,
+                FileName = configuration.ExecutableLocation.AddQuotesIfRequired(),
                 Arguments = configuration.BuildArguments(),
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
