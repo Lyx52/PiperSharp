@@ -21,7 +21,7 @@ public class PiperProvider
         {
             StartInfo = new ProcessStartInfo()
             {
-                FileName = configuration.ExecutableLocation.AddQuotesIfRequired(),
+                FileName = configuration.ExecutableLocation.AddPathQuotesIfRequired(),
                 Arguments = configuration.BuildArguments(),
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,

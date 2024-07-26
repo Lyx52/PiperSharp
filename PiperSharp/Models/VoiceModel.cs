@@ -35,7 +35,7 @@ public class VoiceModel
     {
         if (ModelLocation is null) throw new FileNotFoundException("Model not downloaded!");
         var modelFileName = Path.GetFileName(Files.Keys.FirstOrDefault(f => f.EndsWith(".onnx")));
-        return Path.Join(ModelLocation, modelFileName).AddQuotesIfRequired();
+        return Path.Join(ModelLocation, modelFileName).AddPathQuotesIfRequired();
     }
 
 

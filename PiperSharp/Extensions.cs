@@ -9,8 +9,9 @@ public static class Extensions
         return Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(text));
     }
     
-    public static string AddQuotesIfRequired(this string text)
+    public static string AddPathQuotesIfRequired(this string text)
     {
+        if (Environment.OSVersion.Platform != PlatformID.Win32NT) return text;
         var sb = new StringBuilder();
         if (!text.StartsWith('"')) sb.Append('"');
         sb.Append(text);
