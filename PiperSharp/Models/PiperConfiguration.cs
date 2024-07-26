@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace PiperSharp.Models;
+﻿namespace PiperSharp.Models;
 
 public class PiperConfiguration
 {

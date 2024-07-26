@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp.Tests", "PiperSh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp.Examples", "PiperSharp.Examples\PiperSharp.Examples.csproj", "{BD600C3A-10AF-4954-BF58-7B5AF2147662}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiperSharp.TestApplication", "PiperSharp.TestApplication\PiperSharp.TestApplication.csproj", "{497F72DA-A25E-431B-B318-46DF72A226C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD600C3A-10AF-4954-BF58-7B5AF2147662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497F72DA-A25E-431B-B318-46DF72A226C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497F72DA-A25E-431B-B318-46DF72A226C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497F72DA-A25E-431B-B318-46DF72A226C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497F72DA-A25E-431B-B318-46DF72A226C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
