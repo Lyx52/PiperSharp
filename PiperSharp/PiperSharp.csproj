@@ -8,7 +8,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageIconUrl />
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <RepositoryUrl>https://github.com/Lyx52/PiperSharp</RepositoryUrl>
         <Description>Piper TTS Integration using C#</Description>
         <Authors>Ikars Melnalksnis</Authors>
