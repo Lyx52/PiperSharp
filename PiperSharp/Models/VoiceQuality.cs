@@ -1,8 +1,9 @@
-﻿namespace PiperSharp.Models;
-
-public enum VoiceQuality
+﻿namespace PiperSharp.Models
 {
-    Low,
-    Medium,
-    High
+    public enum VoiceQuality
+    {
+        Low,
+        Medium,
+        High
+    }
 }

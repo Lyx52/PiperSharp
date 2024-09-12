@@ -2,7 +2,6 @@
 using NAudio.Wave;
 using PiperSharp;
 using PiperSharp.Models;
-
 namespace TestApplication;
 
 public class Program
