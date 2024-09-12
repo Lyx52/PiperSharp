@@ -70,6 +70,9 @@ namespace PiperSharp
             {
                 using (var reader = ReaderFactory.Open(downloadStream))
                 {
+                    var piperPath = Path.Join(extractTo, "piper")!;
+                    Queue<(string from, string to)> expectedSymlinks =
+                        new Queue<(string from, string to)>(); 
                     while (reader.MoveToNextEntry())
                     {
                         if (!reader.Entry.IsDirectory)
@@ -78,17 +81,26 @@ namespace PiperSharp
                             {
                                 ExtractFullPath = true,
                                 Overwrite = true,
-                                WriteSymbolicLink = (path, targetPath) =>
+                                WriteSymbolicLink = ((to, from) =>
                                 {
-                                    if (
-                                        Environment.OSVersion.Platform == PlatformID.Unix || 
-                                        Environment.OSVersion.Platform == PlatformID.MacOSX)
-                                    {
-                                        Extensions.symlink(path, targetPath);
-                                    }
-                                }
+                                    expectedSymlinks.Enqueue((from, Path.GetFileName(to)));
+                                })
                             });
                         }
+                    }
+                    while (expectedSymlinks.TryDequeue(out var link))
+                    {
+                        var fromPath = Path.Join(piperPath, link.from);
+                        var toPath = Path.Join(piperPath, link.to);
+                        if (File.Exists(fromPath))
+                        {
+                            File.Copy(fromPath, toPath);
+                            continue;
+                        }
+                        if (File.Exists(toPath)) continue;
+                        
+                        // Could not copy and file does not exist, back in queue
+                        expectedSymlinks.Enqueue(link);
                     }
                 }
             }

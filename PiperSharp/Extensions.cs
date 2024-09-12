@@ -45,9 +45,5 @@ namespace PiperSharp
 
             return process.HasExited ? Task.CompletedTask : tcs.Task;
         }
-        
-        [DllImport("libc", SetLastError = true)]
-        public static extern int symlink([MarshalAs(UnmanagedType.LPStr)] string target, [MarshalAs(UnmanagedType.LPStr)] string path);
-
     }
 }
