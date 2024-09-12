@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using PiperSharp.Models;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-
 namespace PiperSharp
 {
     public static class PiperDownloader
@@ -85,7 +84,7 @@ namespace PiperSharp
                                         Environment.OSVersion.Platform == PlatformID.Unix || 
                                         Environment.OSVersion.Platform == PlatformID.MacOSX)
                                     {
-                                        Extensions.CreateSymbolicLink(path, targetPath, Extensions.SymbolicLinkFlag.AllowUnprivilegedCreate);
+                                        Extensions.symlink(path, targetPath);
                                     }
                                 }
                             });

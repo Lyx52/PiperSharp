@@ -45,18 +45,9 @@ namespace PiperSharp
 
             return process.HasExited ? Task.CompletedTask : tcs.Task;
         }
-        [Flags]
-        public enum SymbolicLinkFlag
-        {
-            IsFile = 0x0,
-            IsDirectory = 0x1,
-            AllowUnprivilegedCreate = 0x2
-        }
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool CreateSymbolicLink(
-            string symbolicLinkName,
-            string targetFileName,
-            SymbolicLinkFlag flags);
+        
+        [DllImport("libc", SetLastError = true)]
+        public static extern int symlink([MarshalAs(UnmanagedType.LPStr)] string target, [MarshalAs(UnmanagedType.LPStr)] string path);
+
     }
 }
