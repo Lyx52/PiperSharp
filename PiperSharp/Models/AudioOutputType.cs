@@ -1,8 +1,9 @@
-﻿namespace PiperSharp.Models;
-
-public enum AudioOutputType
+﻿namespace PiperSharp.Models
 {
-    Raw,
-    Wav,
-    Mp3
+    public enum AudioOutputType
+    {
+        Raw,
+        Wav,
+        Mp3
+    }
 }
