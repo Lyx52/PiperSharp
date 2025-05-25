@@ -21,7 +21,7 @@
       <PackageReference Include="SharpCompress" Version="0.36.0" />
       <None Include="../README.md" Pack="true" PackagePath="./" />
         <None Include="../LICENSE" Pack="true" PackagePath="./" />
-        <PackageReference Include="System.Text.Json" Version="9.0.5" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
 </Project>
