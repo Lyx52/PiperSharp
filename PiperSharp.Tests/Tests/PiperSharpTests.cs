@@ -32,18 +32,27 @@ public class PiperSharpTests
     [Test]
     public async Task TestDownloadModel()
     {
-        var cwd = Directory.GetCurrentDirectory();
-        const string modelName = "ar_JO-kareem-low";
-        var modelPath = Path.Join(cwd, modelName);
-        if (Directory.Exists(modelPath)) Directory.Delete(modelPath, true);
-        var models = await PiperDownloader.GetHuggingFaceModelList();
-        Assert.That(models is { Count: > 0 }, "Failed to get models from hugging face");
-        var model = models![modelName];
-        Assert.That(model is { Key: modelName }, "Expected model doesn't exist!");
-        model = await model.DownloadModel(cwd);
-        Assert.That(model.ModelLocation == modelPath && Directory.Exists(modelPath), "Model not downloaded!");
-        model = await VoiceModel.LoadModel(modelPath);
-        Assert.That(model is { Key: modelName }, "Failed to load model expected model!");
+        string[] modelNames = [
+            "de_DE-eva_k-x_low",
+            "en_GB-alan-low",
+            "lv_LV-aivars-medium",
+            "en_US-ljspeech-high"
+        ];
+        
+        foreach (var modelName in modelNames)
+        {
+            var cwd = Directory.GetCurrentDirectory();
+            var modelPath = Path.Join(cwd, modelName);
+            if (Directory.Exists(modelPath)) Directory.Delete(modelPath, true);
+            var models = await PiperDownloader.GetHuggingFaceModelList();
+            Assert.That(models is { Count: > 0 }, "Failed to get models from hugging face");
+            var model = models![modelName];
+            Assert.That(model.Key, Is.EqualTo(modelName), "Expected model doesn't exist!");
+            model = await model.DownloadModel(cwd);
+            Assert.That(model.ModelLocation == modelPath && Directory.Exists(modelPath), "Model not downloaded!");
+            model = await VoiceModel.LoadModel(modelPath);
+            Assert.That(model.Key, Is.EqualTo(modelName), "Failed to load model expected model!");
+        }   
     }
 
     [Test]
