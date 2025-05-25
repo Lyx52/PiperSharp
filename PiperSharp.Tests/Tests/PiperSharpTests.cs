@@ -32,12 +32,12 @@ public class PiperSharpTests
     [Test]
     public async Task TestDownloadModel()
     {
-        string[] modelNames = [
+        string[] modelNames = {
             "de_DE-eva_k-x_low",
             "en_GB-alan-low",
             "lv_LV-aivars-medium",
             "en_US-ljspeech-high"
-        ];
+        };
         
         foreach (var modelName in modelNames)
         {
