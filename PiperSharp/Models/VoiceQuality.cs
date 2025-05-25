@@ -1,11 +1,8 @@
-﻿using System.Text.Json.Serialization;
-
-namespace PiperSharp.Models
+﻿namespace PiperSharp.Models
 {
     public enum VoiceQuality
     {
-        [JsonStringEnumMemberName("x_low")]
-        XLow,
+        X_Low,
         Low,
         Medium,
         High
