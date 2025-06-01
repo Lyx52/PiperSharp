@@ -1,35 +1,35 @@
-﻿using System.Diagnostics;
-using NAudio.Wave;
-using PiperSharp;
-using PiperSharp.Models;
-namespace TestApplication;
+﻿using PiperSharp.Models;
 
-public class Program
+namespace PiperSharp.TestApplication
 {
-    public static async Task Main()
+
+    public class Program
     {
-        if (!Directory.Exists(PiperDownloader.DefaultPiperLocation))
-            await PiperDownloader.DownloadPiper().ExtractPiper();
-        string text = "Âñåì ïðèâåò, ýòî òåñò ìîåé ïðîãðàììû";
-        VoiceModel model;
-        try
+        public static async Task Main()
         {
-            model = await VoiceModel.LoadModelByKey("ru_RU-dmitri-medium");
+            if (!Directory.Exists(PiperDownloader.DefaultPiperLocation))
+                await PiperDownloader.DownloadPiper().ExtractPiper();
+            string text = "Âñåì ïðèâåò, ýòî òåñò ìîåé ïðîãðàììû";
+            VoiceModel model;
+            try
+            {
+                model = await VoiceModel.LoadModelByKey("ru_RU-dmitri-medium");
+            }
+            catch
+            {
+                model = await PiperDownloader.DownloadModelByKey("ru_RU-dmitri-medium");
+            }
+
+
+            var piperModel = new PiperProvider(new PiperConfiguration()
+            {
+                Model = model,
+            });
+            var result = await piperModel.InferAsync(text, AudioOutputType.Wav); // Returns byte[]
+            var fs = File.OpenWrite("audiofile.wav");
+            fs.Write(result);
+            fs.Flush();
+            fs.Close();
         }
-        catch
-        {
-            model = await PiperDownloader.DownloadModelByKey("ru_RU-dmitri-medium");
-        }
-        
-        
-        var piperModel = new PiperProvider(new PiperConfiguration()
-        {
-            Model = model,
-        });
-        var result = await piperModel.InferAsync(text, AudioOutputType.Wav); // Returns byte[]
-        var fs = File.OpenWrite("audiofile.wav");
-        fs.Write(result);
-        fs.Flush();
-        fs.Close();
     }
 }

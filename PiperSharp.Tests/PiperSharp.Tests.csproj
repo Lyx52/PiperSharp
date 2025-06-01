@@ -4,7 +4,7 @@
         <OutputType>Library</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFrameworks>net8.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
