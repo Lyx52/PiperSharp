@@ -1,10 +1,11 @@
-namespace PiperSharp.Examples;
-
-public class Program
+namespace PiperSharp.Examples
 {
-    public static async Task Main()
+
+    public class Program
     {
-        choose:
+        public static async Task Main()
+        {
+            choose:
             Console.Clear();
             Console.WriteLine("1. Playback sample");
             Console.WriteLine("2. Save to file sample");
@@ -13,11 +14,17 @@ public class Program
             {
                 switch (choice)
                 {
-                    case 1: await (new SimplePlaybackProgram()).Run(); break;
-                    case 2: await (new SimpleSaveFileProgram()).Run(); break;
+                    case 1:
+                        await (new SimplePlaybackProgram()).Run();
+                        break;
+                    case 2:
+                        await (new SimpleSaveFileProgram()).Run();
+                        break;
                     default: goto choose;
                 }
             }
+
             goto choose;
+        }
     }
 }

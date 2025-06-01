@@ -11,7 +11,7 @@
         <RepositoryUrl>https://github.com/Lyx52/PiperSharp</RepositoryUrl>
         <Description>Piper TTS Integration using C#</Description>
         <Authors>Ikars Melnalksnis</Authors>
-        <TargetFrameworks>net6.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks>net6.0;netstandard2.1;net8.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -21,7 +21,7 @@
       <PackageReference Include="SharpCompress" Version="0.36.0" />
       <None Include="../README.md" Pack="true" PackagePath="./" />
         <None Include="../LICENSE" Pack="true" PackagePath="./" />
-        <PackageReference Include="System.Text.Json" Version="8.0.4" />
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
     </ItemGroup>
 
 </Project>
