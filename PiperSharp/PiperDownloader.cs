@@ -77,7 +77,13 @@ namespace PiperSharp
                     {
                         if (!reader.Entry.IsDirectory)
                         {
-                            reader.WriteEntryToDirectory(extractTo, ExtractionOptions.PreserveMetadata);
+                            var options = ExtractionOptions.PreserveMetadata;
+                            options.SymbolicLinkHandler = (to, from) =>
+                            {
+                                expectedSymlinks.Enqueue((from, Path.GetFileName(to)));
+                            };
+                            
+                            reader.WriteEntryToDirectory(extractTo, options);
                         }
                     }
                     while (expectedSymlinks.TryDequeue(out var link))
