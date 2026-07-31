@@ -68,7 +68,7 @@ namespace PiperSharp
             }
             else
             {
-                using (var reader = ReaderFactory.Open(downloadStream))
+                using (var reader = ReaderFactory.OpenReader(downloadStream))
                 {
                     var piperPath = Path.Join(extractTo, "piper")!;
                     Queue<(string from, string to)> expectedSymlinks =
@@ -77,15 +77,7 @@ namespace PiperSharp
                     {
                         if (!reader.Entry.IsDirectory)
                         {
-                            reader.WriteEntryToDirectory(extractTo, new ExtractionOptions()
-                            {
-                                ExtractFullPath = true,
-                                Overwrite = true,
-                                WriteSymbolicLink = ((to, from) =>
-                                {
-                                    expectedSymlinks.Enqueue((from, Path.GetFileName(to)));
-                                })
-                            });
+                            reader.WriteEntryToDirectory(extractTo, ExtractionOptions.PreserveMetadata);
                         }
                     }
                     while (expectedSymlinks.TryDequeue(out var link))
