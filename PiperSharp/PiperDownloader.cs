@@ -68,7 +68,7 @@ namespace PiperSharp
             }
             else
             {
-                using (var reader = ReaderFactory.Open(downloadStream))
+                using (var reader = ReaderFactory.OpenReader(downloadStream))
                 {
                     var piperPath = Path.Join(extractTo, "piper")!;
                     Queue<(string from, string to)> expectedSymlinks =
@@ -81,10 +81,10 @@ namespace PiperSharp
                             {
                                 ExtractFullPath = true,
                                 Overwrite = true,
-                                WriteSymbolicLink = ((to, from) =>
+                                SymbolicLinkHandler = (to, from) =>
                                 {
                                     expectedSymlinks.Enqueue((from, Path.GetFileName(to)));
-                                })
+                                }
                             });
                         }
                     }
