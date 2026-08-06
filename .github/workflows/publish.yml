@@ -8,6 +8,10 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v3
 
@@ -35,7 +39,11 @@ jobs:
       - name: Pack
         run: dotnet pack --configuration Release --no-build --output /home/runner/work/PiperSharp/PiperSharp/nupkgs PiperSharp/PiperSharp.csproj
 
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish to NuGet.org
-        run: dotnet nuget push /home/runner/work/PiperSharp/PiperSharp/nupkgs/PiperSharp.${{ steps.set_version.outputs.no-v }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }} 
+        run: dotnet nuget push /home/runner/work/PiperSharp/PiperSharp/nupkgs/PiperSharp.${{ steps.set_version.outputs.no-v }}.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
