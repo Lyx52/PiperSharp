@@ -37,8 +37,8 @@ jobs:
         run: dotnet build --configuration Release /p:Version=${{ steps.set_version.outputs.no-v }} 
 
       - name: Pack
-        run: dotnet pack --configuration Release --no-build --output /home/runner/work/PiperSharp/PiperSharp/nupkgs PiperSharp/PiperSharp.csproj
-
+        run: dotnet pack PiperSharp/PiperSharp.csproj --configuration Release --no-build --output ./nupkgs /p:Version=${{ steps.set_version.outputs.no-v }}
+        
       - name: NuGet login (OIDC)
         uses: NuGet/login@v1
         id: login
